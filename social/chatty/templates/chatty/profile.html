@@ -1,0 +1,115 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile-box shadow">
+        <div style="width: inherit; margin: auto;">
+            <!-- display profile picture -->
+            <img class="pfp" src="{{ profile.pfp.url }}" width="150" height="150">
+        </div>
+        <div class="profile-info">
+            <!-- display first and last name in one line -->
+            <span style="font-weight: bold;">Name</span><br/>
+            {{ profile.first_name }}&nbsp;{{ profile.last_name }}<br/><br/>
+            <!-- display username -->
+            <span style="font-weight: bold;">Username</span><br/>
+            {{ user.username }}<br/><br/>         
+            <!-- display email -->
+            <span style="font-weight: bold;">Email</span><br/>
+            {{ user.email }}
+            <br/><br/>
+            <!-- form to edit profile -->
+            <form id="edit_profile_form" method="get" action="../edit/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- button to submit -->
+                <input class="button" type="submit" value="Edit Profile">
+            </form>
+        </div>
+        <div style="width: inherit; margin: auto; margin-bottom: 15px;">
+            <a style="font-weight: normal; font-size: 14px;" href="../api/user/{{ profile.pk }}">View Your Data</a>
+        </div>
+    </div>
+    <div>
+        <!-- if user has posts -->
+        {% if profile.get_posts %}
+        <!-- for each post -->
+        {% for post in profile.get_posts %}
+        <div class="posts-box shadow">
+            <!-- display content -->
+            <div class="posts-text">{{ post.content }}</div>
+            <!-- if image is not null, display image -->
+            {% if post.image %}
+            <div class="posts-text" style="margin-top: 10px;">
+                <img src="{{ post.image.url }}" width="150">
+            </div>
+            {% endif %}
+            <div class="posts-separator"></div>
+            <!-- display date post was created -->
+            <div class="posts-text meta">{{ post.get_created }}</div>
+        </div>
+        {% endfor %}
+        <!-- if user has no posts, display message -->
+        {% else %}
+        <div class="posts-box shadow">
+            <div class="posts-text">No posts yet.</div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="friends-box shadow">
+        <div style="font-size: 18px;">
+            <strong>
+                <!-- display total number of posts made by user -->
+                <span>POSTS</span>
+                <span style="float: right;">{{ profile.get_number_of_posts }}</span>
+            </strong><br/>
+        </div>
+        <div class="friends-separator"></div>
+        <div>
+            <strong style="font-size: 18px;">
+                <!-- display total number of friends user has -->
+                <span>FRIENDS</span>
+                <span style="float: right;">{{ profile.get_number_of_friends }}</span>
+            </strong><br/>
+            <!-- for each friend, display their username -->
+            {% for friend in profile.get_friends %}
+            <strong>&centerdot;</strong>&nbsp;{{ friend }}<br/>
+            {% endfor %}
+        </div>
+        <div class="friends-separator"></div>
+        <div>
+            <strong style="font-size: 18px;">
+                <!-- display total number of requests (have yet to be approved) -->
+                <span>REQUESTS</span>
+                <span style="float: right;">{{ num_requests }}</span>
+            </strong><br/>
+            <!-- for each request -->
+            {% for request in friend_requests %}
+                <div style="margin-top: 2px;">
+                    <!-- display the sender's username -->
+                    <strong>&centerdot;</strong>&nbsp;{{ request.get_sender }}<br/>
+                    <div>
+                        <!-- form to approve a request -->
+                        <form action="{% url 'accept-request' %}" method="post">
+                            {% csrf_token %}
+                            <!-- input of request pk to be accepted -->
+                            <input name="request_pk" value="{{ request.pk }}" hidden>
+                            <!-- button to submit -->
+                            <button class="userprofile-button green">Approve Friend Request</button>
+                        </form>
+                    </div>
+                    <div>
+                        <!-- form to reject a request -->
+                        <form action="{% url 'remove-request' %}" method="post">
+                            {% csrf_token %}
+                            <!-- input of request pk to be removed -->
+                            <input name="request_pk" value="{{ request.pk }}" hidden>
+                            <!-- button to submit -->
+                            <button class="userprofile-button red">Remove Friend Request</button>
+                        </form>                        
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

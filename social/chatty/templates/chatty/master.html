@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>chaT-Ty</title>
+        <link rel="stylesheet" type="text/css" href="../../static/css/chatty.css">
+    </head>
+    <body>      
+        {% include "./header.html" %}
+        <div class="content">
+            {% block content %}
+                Didn't render content
+            {% endblock %}
+        </div>
+        {% include "./footer.html" %}
+    </body>
+</html>

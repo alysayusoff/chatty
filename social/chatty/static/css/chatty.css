@@ -1,0 +1,275 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #f2f2f2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.content {
+    width: 100%;
+    max-height: inherit;
+    margin-top: 61px;
+    margin-bottom: 60px;
+}
+
+a {
+    text-decoration: None;
+    color: #417c7a;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #164350;
+}
+
+input[type=text], input[type=email], input[type=password] {
+    height: 30px;
+    width: 220px;
+    padding-left: 5px;
+}
+
+.button {
+    background-color: #417c7a;
+    color: white;
+    width: 100%;
+    height: 35px;
+    border-radius: 3px;
+    border: none;
+}
+
+.button:hover {
+    color: white;
+    background-color: #275e6d;
+}
+
+input[type=submit]:hover {
+    color: white;
+    background-color: #275e6d;
+}
+
+.header {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+}
+
+.nav-bar {
+    width: 100%;
+    height: 60px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.nav-left {
+    width: 30%;
+    height: 60px;
+    float: left;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.nav-middle {
+    width: 50%;
+    float: left;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-right {
+    width: 20%;
+    height: 60px;
+    float: right;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.login, .register, .view-profile, .public_chat, .room {
+    width: fit-content;
+    height: 100%;
+    margin: auto;
+    padding: 15px;
+}
+
+.all-profiles {
+    width: fit-content;
+    height: 100%;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.profile, .home {
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    padding: 15px;
+    display: flex;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+}
+
+.shadow {
+    border-radius: 5px;
+    border: 1px solid rgb(210, 210, 210);
+    box-shadow: 1px 1px 5px #888888;
+}
+
+.profile-box {
+    background-color: white;
+    width: fit-content;
+    height: fit-content;
+    /* display: flex; */
+    margin-top: 5px;
+    margin-right: 10px;
+    position: sticky;
+    top: 81px;
+}
+
+.pfp {
+    margin: 15px;
+    margin-bottom: 0px;
+    border: 1px solid;
+    border-radius: 150px;
+}
+
+.profile-info {
+    margin: 10px;
+}
+
+.posts-box {
+    width: 500px;
+    height: fit-content;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 9px;
+    background-color: white;
+    font-size: 15px;
+}
+
+.posts-text {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.meta {
+    font-size: 11px;
+}
+
+.posts-separator {
+    width: 494px; 
+    height: 1px; 
+    background-color: rgb(225, 225, 225);
+    margin-top: 8px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+}
+
+.friends-box {
+    min-width: 150px;
+    height: fit-content;
+    margin-top: 5px;
+    margin-left: 10px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    position: sticky;
+    top: 81px;
+}
+
+.friends-separator {
+    width: 100%; 
+    height: 1px; 
+    background-color: rgb(225, 225, 255);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.create-post {
+    width: fit-content;
+    height: fit-content;
+    margin-left: 10px;
+    padding: 10px;
+    background-color: white;
+    font-size: 15px;
+    position: sticky;
+    top: 81px;
+}
+
+.userprofile {
+    min-width: 300px;
+    height: fit-content;
+    margin: 10px;
+    padding-top: 4px;
+    padding-left: 4px;
+    padding-right: 5px;
+    background-color: white;
+}
+
+.userprofile-pfp {
+    margin-right: 10px;
+    border: 1px solid;
+    border-radius: 150px;
+}
+
+.userprofile-button {
+    border-style: solid;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 2px;
+    border-width: 1px;
+    background-color: white;
+}
+
+.green {
+    color: #417c7a;
+    border-color: #417c7a;
+}
+
+.green:hover {
+    background-color: rgb(158, 201, 199, 0.5);
+}
+
+.red {
+    color: rgb(196, 71, 71);
+    border-color: rgb(196, 71, 71);
+}
+
+.red:hover {
+    background-color: rgb(224, 134, 134, 0.5);
+}
+
+.searchstick {
+    padding-bottom: 1px;
+    padding-left: 5px;
+    padding-top: 15px;
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 61px;
+}
+
+.searchbox {
+    height: 10px;
+    width: 220px;
+    padding-left: 5px;
+}
+
+.footer {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background-color: white;
+    color: rgb(160, 160, 160);
+    position: fixed;
+    bottom: 0;
+}

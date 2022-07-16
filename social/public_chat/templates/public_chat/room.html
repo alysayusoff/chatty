@@ -1,0 +1,70 @@
+{% extends "chatty/master.html" %}
+
+{% block content %}
+<div class="room">
+    <div style="width: 100%; text-align: center; font-size: 20px; margin-bottom: 10px;">
+        Room: <strong>{{ room_name }}</strong>
+    </div>
+    <!-- textarea where messages will be sent to (readonly) -->
+    <textarea id="public_chat" cols="100" rows="25" readonly>Welcome! Send a message to start chatting with friends.</textarea><br>
+    <!-- username as an input, hidden -->
+    <input id="room_user" type="text" value="{{ profile.user }}" readonly hidden>
+    <div style="width: 100%; margin: auto;">
+        <!-- message input -->
+        <input id="message" type="text" style="width: 762px; margin: 0px;" placeholder="Type a message..."><br>
+        <!-- button to submit -->
+        <input class="button" id="send_message" type="button" value="Send" style="margin-top: 4px;">
+    </div>
+</div>
+<!-- safely outputed python object as JSON, wrapped in a <script> tag, ready for use with JavaScript -->
+{{ room_name|json_script:"room_name" }}
+<script>
+    // get room name
+    const room = JSON.parse(document.getElementById('room_name').textContent);
+    // create a new WebSocket for room
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/' + room + '/');
+    // when a message is sent
+    chatSocket.onmessage = function(e) {
+        // parse data
+        const data = JSON.parse(e.data);
+        // get textarea element
+        var textarea = document.querySelector('#public_chat')
+        // push message to textarea
+        textarea.value += ('\n\n' + data.message);
+        // as more messages are sent, set scrollHeight to scrollTop, so that
+        // you can see each new message without having to manually scroll down
+        textarea.scrollTop = textarea.scrollHeight;
+    };
+    // when websocket closes
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+    document.querySelector('#message').onkeyup = function(e) {
+        // if 'enter' button is pressed
+        if (e.keyCode === 13) {
+            // run button.click
+            document.querySelector('#send_message').click();
+        }
+    };
+    // when button is clicked
+    document.querySelector('#send_message').onclick = function(e) {
+        // get username
+        const sender = document.querySelector('#room_user');
+        // get message
+        const message_input = document.querySelector('#message');
+        // if the message is not empty
+        if (message_input.value != '') {
+            // combine username and message into one string
+            const message = sender.value + ": " + message_input.value;
+            // send message
+            chatSocket.send(JSON.stringify({ 'message' : message }));
+            // reset message input
+            message_input.value = '';
+        }
+        // if message is empty, send alert
+        else {
+            alert("Please enter a message.");
+        }
+    };
+</script>
+{% endblock %}

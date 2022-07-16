@@ -1,0 +1,112 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="all-profiles">
+    <!-- search text box to search for friends -->
+    <div class="searchstick">
+        <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Search for friends..." 
+        style="height: 20px; margin-left: 5px; margin-right: 5px; min-width: 300px;">
+    </div>
+    <!-- in the case that there are no other users, display a message -->
+    {% if is_empty %}
+    <div class="userprofile shadow">Whoops! Looks like you're our first and only user.</div>
+    {% else %}
+    <ul id="user_list" style="list-style: none; padding-left: 0;">
+        <!-- for each user -->
+        {% for user in users %}
+        <li>
+            <div class="userprofile shadow" style="display: flex;">
+                <div>
+                    <!-- display profile picture -->
+                    <img class="userprofile-pfp" src="{{ user.pfp.url }}" width="75" height="75">
+                </div>
+                <div>
+                    <div>
+                        <!-- display username -->
+                        <strong><a style="color: black;" href="#">{{ user }}</a></strong>
+                        <!-- display name -->
+                        <span style="font-size: 13px; color: rgb(56, 56, 56)">{{ user.first_name }} {{user.last_name}}</span>
+                    </div>
+                    <div>
+                        <!-- all profiles will have 'View Profile' button -->
+                        <div>
+                            <form action="{% url 'view-profile' %}" method="get">
+                                {% csrf_token %}
+                                <input name="user_pk" value="{{ user.pk }}" hidden>
+                                <button class="userprofile-button green">View Profile</button>
+                            </form>
+                        </div>
+                        <!-- if you and the user are not friends -->
+                        {% if user.user not in receiver_req and user.user not in sender_req %}
+                        <div>
+                            <!-- form to add to friends -->
+                            <form action="{% url 'send-request' %}" method="post">
+                                {% csrf_token %}
+                                <input name="user_pk" value="{{ user.pk }}" hidden>
+                                <button class="userprofile-button green">Add to Friends</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                        <!-- if you have sent a request but it hasn't been accepted -->
+                        {% if user.user in receiver_req and request.user not in user.friends.all %}
+                        <div>
+                            <button disabled>Friend Request Received</button>
+                        </div>
+                        {% endif %}
+                        <!-- if they sent you a request but you have yet to accept -->
+                        {% if user.user in sender_req and request.user not in user.friends.all %}
+                        <div>
+                            <button disabled>Waiting Approval</button>
+                        </div>
+                        {% endif %}
+                        <!-- if you are friends and you wish to remove them as a friend -->
+                        {% if request.user in user.friends.all %}
+                        <div>
+                            <!-- form to remove a friend -->
+                            <form action="{% url 'remove-friend' %}" method="post">
+                                {% csrf_token %}
+                                <input name="user_pk" value="{{ user.pk }}" hidden>
+                                <button class="userprofile-button red">Remove Friend</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<script>
+    function searchFunction() {
+        var input, filter, ul, li, a, i, txtValue;
+        // get element of search text box
+        input = document.getElementById("searchInput");
+        // change the value to upper case (to generalize search)
+        filter = input.value.toUpperCase();
+        // get element of unordered list
+        ul = document.getElementById("user_list");
+        // get element of list
+        li = ul.getElementsByTagName("li");
+
+        for (i = 0; i < li.length; i++) {
+            // get a tag =====> <a>{{ user }}</a>
+            a = li[i].getElementsByTagName("a")[0];
+            usernameValue = a.textContent || a.innerText;
+            // get span tag =====> <span>{{ user.first_name }} {{ user.last_name }}</span>
+            span = li[i].getElementsByTagName("span")[0];
+            nameValue = span.textContent || span.innerText;
+            // if the input matches either username or first/last name of user, display list
+            if (usernameValue.toUpperCase().indexOf(filter) > -1 || nameValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } 
+            // else, display none
+            else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+</script>
+{% endblock %}

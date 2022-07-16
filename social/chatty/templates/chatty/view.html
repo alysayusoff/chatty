@@ -1,0 +1,86 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile-box shadow">
+        <div>
+            <!-- display user profile picture -->
+            <img class="pfp" src="{{ requested_user.pfp.url }}" width="150" height="150">
+        </div>
+        <div class="profile-info">
+            <!-- display name of user -->
+            <span style="font-weight: bold;">Name</span><br/>
+            {{ requested_user.first_name }}&nbsp;{{ requested_user.last_name }}<br/><br/>
+            <!-- display username of user -->
+            <span style="font-weight: bold;">Username</span><br/>
+            {{ requested_user.user.username }}<br/><br/>
+            <!-- if you are friends with the user, display user email -->
+            {% if request.user in requested_user.friends.all %}
+            <span style="font-weight: bold;">Email</span><br/>
+            {{ requested_user.user.email}}
+            <!-- if you are not friends with the user, block viewing of email -->
+            {% else %}
+            <span style="font-weight: bold;">Email</span><br/>
+            *****@********.com
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <!-- if you are friends with the user -->
+        {% if request.user in requested_user.friends.all %}
+        <!-- for each post -->
+        {% for post in requested_user.get_posts %}
+        <div class="posts-box shadow">
+            <!-- display content -->
+            <div class="posts-text">{{ post.content }}</div>
+            <!-- display image -->
+            {% if post.image %}
+            <div class="posts-text" style="margin-top: 10px;">
+                <img src="{{ post.image.url }}" width="150">
+            </div>
+            {% endif %}
+            <div class="posts-separator"></div>
+            <!-- display date post was created -->
+            <div class="posts-text meta">{{ post.get_created }}</div>
+        </div>
+        {% endfor %}
+        <!-- if you are not friends, display message -->
+        {% else %}
+        <div class="posts-box shadow">
+            <div class="posts-text">Add this user as a friend to see their posts.</div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="friends-box shadow">
+        <div style="font-size: 18px;">
+            <strong>
+                <span>POSTS</span>
+                <!-- only if you and the user are friends can you see the total number of posts -->
+                {% if request.user in requested_user.friends.all %}
+                <span style="float: right;">{{ requested_user.get_number_of_posts }}</span>
+                {% else %}
+                <span style="float: right;">*</span>
+                {% endif %}
+            </strong><br/>
+        </div>
+        <div class="friends-separator"></div>
+        <div>
+            <strong style="font-size: 18px;">
+                <span>FRIENDS</span>
+                <!-- only if you and the user are friends can you see the total number of friends -->
+                {% if request.user in requested_user.friends.all %}
+                <span style="float: right;">{{ requested_user.get_number_of_friends }}</span>
+                {% else %}
+                <span style="float: right;">*</span>
+                {% endif %}
+            </strong><br/>
+            <!-- only if you and the user are friends can you see who user is friends with -->
+            {% if request.user in requested_user.friends.all %}
+            {% for friend in requested_user.get_friends %}
+            <strong>&centerdot;</strong>&nbsp;{{ friend }}<br/>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

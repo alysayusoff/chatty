@@ -1,0 +1,37 @@
+{% extends "chatty/master.html" %}
+
+{% block content %}
+<div class="public_chat">
+    What chat room would you like to enter?<br/>
+    <div style="width: inherit; margin: auto; margin-top: 20px;">
+        <!-- input for room name -->
+        <input id="room_name" type="text" required><br>
+    </div>
+    <div style="width: inherit; margin: auto; margin-top: 20px;">
+        <!-- button to submit -->
+        <input class="button" style="width: 100px;" id="enter_room" type="button" value="Enter">
+    </div>
+</div>
+
+<script>
+    document.querySelector('#room_name').onkeyup = function(e) {
+        // if 'enter' button is pressed
+        if (e.keyCode === 13) {
+            // run button.click
+            document.querySelector('#enter_room').click();
+        }
+    };
+    // when button is clicked
+    document.querySelector('#enter_room').onclick = function(e) {
+        // get room name value
+        var room_name = document.querySelector('#room_name').value;
+        // check if room name is not empty
+        if (room_name != '')
+            // render chat/<room name>
+            window.location.pathname = 'chat/' + room_name + '/';
+        else
+            // send alert that room name cannot be empty
+            alert("Please enter a room name.");
+    };
+</script>
+{% endblock %}

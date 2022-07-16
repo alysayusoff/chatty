@@ -1,0 +1,61 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="home">
+    <div>
+        <!-- in the case that a new user has no friends and posts, display message -->
+        {% if profile.friends.all.count == 0 and profile.get_number_of_posts == 0 %}
+        <div style="padding-left: 10px;" class="posts-box shadow">
+            Whoops! No posts to show. Add friends or create a post!
+        </div>
+        {% endif %}
+        <!-- if there are posts -->
+        {% if posts %}
+        <!-- for each post -->
+        {% for post in posts %}
+        <!-- only your friends and your posts can be seen -->
+        {% if request.user == post.author.user or request.user in post.author.friends.all %}
+        <div class="posts-box shadow">
+            <div class="posts-text">
+                <!-- display username -->
+                <span style="margin-bottom: 5px; font-size: 13px; font-weight: bold;">@{{ post.author }}</span>
+                <!-- if the post has been made by the user, add a small 'you' at the end -->
+                {% if request.user == post.author.user %}
+                <span style="font-size: 11px; margin-bottom: 15px; color: rgb(160, 160, 160);">you</span>
+                {% endif %}
+            </div>
+            <!-- display the content -->
+            <div class="posts-text">{{ post.content }}</div>
+            <!-- if the post has an image -->
+            {% if post.image %}
+            <div class="posts-text" style="margin-top: 10px;">
+                <!-- display the image -->
+                <img src="{{ post.image.url }}" width="150">
+            </div>
+            {% endif %}
+            <div class="posts-separator"></div>
+            <!-- display the date and time the past was created -->
+            <div class="posts-text meta">{{ post.get_created }}</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="create-post shadow">
+        <div>
+            <form id="post_form" method="post" action="../home/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- display each input -->
+                {{ post_form.content }}<br/>
+                {{ post_form.image }}<br/>
+                <!-- button to submit form -->
+                <input style="margin-top: 5px; font-weight: bold;" class="button" type="submit" value="Post">
+            </form>
+        </div>
+        <!-- if the post was successfully posted, display a message -->
+        {% if posted %}
+        <div style="margin-top: 5px;">Posted!</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

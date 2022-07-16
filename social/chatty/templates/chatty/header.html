@@ -1,0 +1,25 @@
+<div class="header">
+    <div class="nav-bar">
+        <div class="nav-left">
+            <!-- link to homepage -->
+            <a style="padding: 20px;" href="../../home/">chaT-Ty</a>
+            <!-- only logged in users will be able to see external links -->
+            {% if user.is_authenticated %}
+            <span style="padding-right: 20px;"><a href="../../search/">Find Friends</a></span>
+            <span><a href="../../chat/">Chat with Friends!</a></span>
+            {% endif %}
+        </div>
+        <div class="nav-right">
+            <!-- only logged in users will be able to see external links -->
+            {% if user.is_authenticated %}
+            <span style="margin-right: 20px;">Hello,&nbsp;<strong>{{ profile.first_name }}</strong>!</span>
+            <span style="margin-right: 20px;"><a href="../../profile/">Profile</a></span>
+            <span style="margin-right: 20px;"><a href="../../logout/">Logout</a></span>
+            <!-- general users can always see the login link -->
+            {% else %}
+            <a style="padding: 20px;" href="../../login/">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div style="width: 100%; height: 1px; background-color: rgb(180, 180, 180);"></div>
+</div>

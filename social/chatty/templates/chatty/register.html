@@ -1,0 +1,37 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="register">
+    <!-- if a new user has been successfully registered, display thank you messagin with link to login -->
+    {% if registered %}
+    <strong>Thank you for registering! Login <a href="../login/">here</a>.</strong>
+    <!-- display register page -->
+    {% else %}
+    <div style="font-size: 30px; text-align: center; font-weight: bold;">
+        chaT-Ty
+    </div>
+    <br/>
+    <!-- register form -->
+    <div class="form">
+        <form id="user_form" method="post" action="../register/" enctype="multipart/form-data">
+            <!-- {% csrf_token %} is a CSRF middleware and template tag that provides 
+            easy-to-use protection against Cross Site Request Forgeries -->
+            {% csrf_token %}
+            <!-- display each input -->
+            {{ profile_form.first_name }}<br/><br/>
+            {{ profile_form.last_name }}<br/><br/>
+            {{ user_form.username }}<br/><br/>
+            {{ user_form.email }}<br/><br/>
+            {{ user_form.password }}<br/><br/>
+            <!-- button to submit form -->
+            <input class="button" type="submit" name="submit" value="Register" />
+        </form>
+    </div>
+    <br/>
+    <div style="width: 300px; height: 1px; background-color: rgb(180, 180, 180);"></div>
+    <br/>
+    <!-- in the case that a user already has an account, display link to login page -->
+    <div class="form" style="margin-bottom: 10px;">Already have an account? Login&nbsp;<a href="../login/">here</a>.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "./master.html" %}
+
+{% block content %}
+<div class="register">
+    <div style="font-size: 30px; text-align: center; font-weight: bold;">
+        Edit Your Profile
+    </div>
+    <br/>
+    <form style="width: fit-content;" id="user_form" method="post" action="../edit/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="width: inherit; margin-bottom: 10px;">
+            <div style="width: inherit; margin: auto;">
+                <!-- show current profile picture -->
+                <img src="{{ profile.pfp.url }}" width="125" height="125" /><br/>
+            </div>
+            <div style="font-size: 13px;">
+                <!-- input for profile picture -->
+                {{ profile_form.pfp }}
+            </div>
+        </div>
+        <div style="width: inherit; margin: auto;">
+            <!-- input for username -->
+            Username<br/>
+            {{ user_form.username }}<br/><br/>
+            <!-- input for first name -->
+            First Name<br/>
+            {{ profile_form.first_name }}<br/><br/>
+            <!-- input for last name -->
+            Last Name<br/>
+            {{ profile_form.last_name }}<br/><br/>
+            <!-- input for email -->
+            Email<br/>
+            {{ user_form.email }}<br/><br/>
+            <!-- button to submit -->
+            <input class="button" type="submit" name="submit" value="Update" />
+        </div>
+    </form>
+</div>
+{% endblock %}
